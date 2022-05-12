@@ -1,49 +1,40 @@
 "use strict";
 
+const role = "Sentinel";
+
 const app = {
-  items: [],
-  init() {
-      //Fetch Data
-      this.getData();
-      //Filter Data
-      this.search();
-      //Sort Data
-      this.sort();
-      //Render stuff
-      this.render();
-
-  },
-  getData() {
-      fetch('https://valorant-api.com/v1/agents')
-          .then(
-              function (response) {
-                  if (response.status !== 200) {
-                      console.log('Error ' +
-                          response.status);
-                      return;
-                  }
-
-                  response.json()
-                      .then(function (data) {
-                          console.log(data.data);
-                      });
-              }
-          )
-          .catch(function (err) {
-              console.log('Fetch Error :-S', err);
-          });
-
-  },
-  search() {
-
-  },
-  sort() {
-
-  },
-
-  render() {
-
-  }
-
+    init: function () {
+        fetch('https://valorant-api.com/v1/agents')
+            .then(response => {
+                return response.json();
+            }).then(data => {
+                //Shows the agents
+                displayAgents(data.data);
+            });
+    }
 };
+
+function displayAgents(agents) {
+    document.getElementById('agentsLineup').innerHTML = "";
+    for (let agent of agents) {
+        console.log(agent.displayName);
+        if (role == "all") {
+            document.getElementById('agentsLineup').innerHTML += `
+        <div class="agent" id=${agent.displayName}>
+          <img src="${agent.displayIcon}" alt="${agent.displayName}">
+          <h1>${agent.displayName}</1h>
+        </div>
+        `;
+        } else if (agent.role == null) {
+            console.log(undefined);
+        } else if (agent.role.displayName) {
+            document.getElementById('agentsLineup').innerHTML += `
+        <div class="agent" id=${agent.displayName}>
+          <img src="${agent.displayIcon}">
+          <h1>${agent.displayName}</1h>
+        </div>
+        `;
+        }
+    }
+}
 app.init();
