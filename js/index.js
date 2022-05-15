@@ -22,8 +22,8 @@ const app = {
 
 };
 
-var role = "all";
-var agentsRoles;
+let role = "all";
+let agentsRoles;
 function displayAgents(agents) {
   document.getElementById('agentsList').innerHTML = "";
 
@@ -33,7 +33,7 @@ function displayAgents(agents) {
       {
         if(agent.role !== null)
         {
-          console.log(agent.role.displayName);
+         // console.log(agent.role.displayName);
           if(agent.role.displayName === "Duelist")
           {
             agentsRoles[0]++
@@ -81,15 +81,24 @@ function displayAgents(agents) {
       agentBtn.addEventListener('click', function () {
         console.log(this.id);
         
-        displayAgents(agents);
+        // display agent data
+        for(let agent of agents)
+        {
+          if(agent.displayName == this.id)
+          {
+            //console.log(agent.displayName);
+            getAgent(agent);
+          }
+        }
+
       });
     }
 
-    // role buttons
+    //role buttons
     const rolesBtn = document.getElementsByClassName('radioIn');
     for (let roleBtn of rolesBtn) {
       roleBtn.addEventListener('click', function () {
-        var agentRole = this.value;
+        let agentRole = this.value;
         role = agentRole;
         displayAgents(agents);
         console.log(agentRole);
@@ -97,6 +106,51 @@ function displayAgents(agents) {
       });
     }
 }
+
+// pick agent data to display description
+function getAgent(agent) {
+  
+  let agentDescriptionDiv =document.getElementById('agentDescription');
+  agentDescriptionDiv.innerHTML = "";
+  agentDescriptionDiv.innerHTML += `
+  <div class="agentDescription" style= background-color: rgb(30, 30, 30)>
+    <img src="${agent.displayIcon}" alt="${agent.displayName}">
+    <h1>Name: ${agent.displayName}</1h>
+    <h2>Role: ${agent.role.displayName}</2h>
+    <h3>Description: ${agent.description}</3h>
+    <h2>Abilities:</2h>
+    <ul>
+      <li>
+       <h1>
+       ${agent.abilities[0].displayName} 
+       </h1>
+       <p> ${agent.abilities[0].description}</p>
+      </li>
+      <li>
+        <h1>
+        ${agent.abilities[1].displayName}
+        </h1>
+        <p> ${agent.abilities[1].description}</p>
+      </li>
+      <li>
+        <h1>
+        ${agent.abilities[2].displayName}
+        </h1>
+        <p> ${agent.abilities[2].description}</p>
+      </li>
+      <li>
+        <h1>
+        ${agent.abilities[3].displayName}
+        </h1>
+        <p> ${agent.abilities[3].description}</p>
+      </li>
+      
+    </ul>
+   
+  </div>`;
+
+}
+
 
 //make a chart table of the agents displayName
 function chartTable() {
