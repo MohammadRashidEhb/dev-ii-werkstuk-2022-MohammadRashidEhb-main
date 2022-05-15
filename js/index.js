@@ -23,9 +23,11 @@ const app = {
 };
 
 var role = "all";
-var agentsRoles = [0, 0, 0, 0];
+var agentsRoles;
 function displayAgents(agents) {
   document.getElementById('agentsList').innerHTML = "";
+
+  agentsRoles = [0, 0, 0, 0];
 
   for(let agent of agents)
       {
@@ -45,9 +47,9 @@ function displayAgents(agents) {
           {
             agentsRoles[3]++
           }
-          console.log(agentsRoles);
+         
         }
-             
+       
         //console.log(agent.displayName); 
         if (agent.role == null) 
         { 
@@ -70,7 +72,7 @@ function displayAgents(agents) {
         </div>
         `;
         }
-
+      
     }
 
     //add event listener to the agents
@@ -79,13 +81,26 @@ function displayAgents(agents) {
       agentBtn.addEventListener('click', function () {
         console.log(this.id);
         
+        displayAgents(agents);
+      });
+    }
+
+    // role buttons
+    const rolesBtn = document.getElementsByClassName('radioIn');
+    for (let roleBtn of rolesBtn) {
+      roleBtn.addEventListener('click', function () {
+        var agentRole = this.value;
+        role = agentRole;
+        displayAgents(agents);
+        console.log(agentRole);
+        
       });
     }
 }
 
 //make a chart table of the agents displayName
 function chartTable() {
-  
+
   const data = {
   labels: [
     "Duelist",
@@ -109,10 +124,12 @@ function chartTable() {
   type: 'bar',
   data: data
   };
+
   const myChart = new Chart(
     document.getElementById('myChart'),
     config
   );
+
 
 }
 app.init();
