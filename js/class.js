@@ -1,7 +1,6 @@
 "use strict";
 
 export class Agent {
-    //...
     constructor(name, role, image, description,abilities) {
         this.name = this.getName(name);
         this.role = this.getRole(role);

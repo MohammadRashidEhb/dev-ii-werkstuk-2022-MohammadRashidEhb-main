@@ -8,6 +8,7 @@ let counter = -1;
 const app = {
   
   init: function () {
+   // console.log(ag);
     fetch('https://valorant-api.com/v1/agents')
     .then(response => {
     return response.json();
@@ -15,12 +16,13 @@ const app = {
 
       for(let agent of data.data)
       {
+        //small fix for the data, sova has no role (double) )
         if(agent.role !== null)
         {
           counter++;
           agentsList[counter] = new Agent(agent.displayName, agent.role.displayName, 
             agent.displayIcon, agent.description, agent.abilities);
-          
+            
         }
         
       }
@@ -39,6 +41,9 @@ const app = {
 
 let role = "all";
 let agentsRoles;
+let search = '';
+
+//display the agents
 function displayAgents(agents) {
   document.getElementById('agentsList').innerHTML = "";
 
@@ -48,7 +53,9 @@ function displayAgents(agents) {
   for(let agent of agents)
       {
         
-         // console.log(agent.role.displayName);
+        if(agent.DisplayName.toLowerCase().includes(search)) {
+        
+         //how many agents of each role
           if(agent.role.includes("Duelist"))
           {
             agentsRoles[0]++
@@ -63,8 +70,7 @@ function displayAgents(agents) {
             agentsRoles[3]++
           }
          
-       
-        //console.log(agent.displayName); 
+          //filter agents by role
         
          if (role == 'all') {
          // console.log(agent);
@@ -84,22 +90,22 @@ function displayAgents(agents) {
         </div>
         `;
         }
-      
+      }
+     
     }
 
     //add event listener to the agents
     const agentsBtn = document.getElementsByClassName('agent');
     for (let agentBtn of agentsBtn) {
       agentBtn.addEventListener('click', function () {
-        //console.log(this.id);
         
-        //display agent data
+        //get the agent data
         for(let agent of agentsList)
         {
              
           if(agent.DisplayName == this.id)
           {
-            console.log(this.id);    
+            // console.log(this.id);    
             getAgent(agent);
           }
         }
@@ -114,20 +120,67 @@ function displayAgents(agents) {
         let agentRole = this.value;
         role = agentRole;
         displayAgents(agents);
-        console.log(agentRole);
+       // console.log(agentRole);
         
       });
     }
 }
 
+ //search bar 
+ document.getElementById('search').addEventListener('keyup', function(e) {
+  search = document.getElementById('search').value.toLowerCase();
+  document.getElementById('agentsList').innerHTML ='';
+  for(let agent of agentsList)
+  {
+    if(agent.DisplayName.toLowerCase().includes(search)) {
+      if (role == 'all') {
+        // console.log(agent);
+         document.getElementById('agentsList').innerHTML += `
+        <div class="agent" id=${agent.DisplayName}>
+         <img src="${agent.image}" alt="${agent.name}">
+         <h1>${agent.DisplayName}</1h>
+       </div>
+       `;
+       }
+       
+       else if (agent.role.toLowerCase().includes(role.toLowerCase()) ) {
+         document.getElementById('agentsList').innerHTML += `
+         <div class="agent" id=${agent.DisplayName}>
+         <img src="${agent.image}" alt="${agent.name}">
+         <h1>${agent.DisplayName}</1h>
+       </div>
+       `;
+       }
+    }
+  }
 
+  //event listener on agents
+  const agentsBtn = document.getElementsByClassName('agent');
+  for (let agentBtn of agentsBtn) {
+    agentBtn.addEventListener('click', function () {
+      
+      //get agent data
+      for(let agent of agentsList)
+      {
+           
+        if(agent.DisplayName == this.id)
+        {
+          console.log(this.id);    
+          
+          getAgent(agent);
+        }
+      }
 
-// pick agent data to display description
+    });
+  }
+});
+
+// pick agent data to display discription 
 function getAgent(agent) {
   
   console.log(agent);
   
-  let agentDescriptionDiv =document.getElementById('agentDescription');
+  let agentDescriptionDiv = document.getElementById('agentDescription');
   agentDescriptionDiv.innerHTML = "";
   agentDescriptionDiv.innerHTML += `
   <div class="agentDescription" >
@@ -162,7 +215,6 @@ function getAgent(agent) {
         <p> ${agent.abilities[3].description}</p>
       </li>
     </ul>
-   
   </div>`;
 
 }
@@ -170,7 +222,7 @@ function getAgent(agent) {
 
 //make a chart table of the agents displayName
 function chartTable() {
-  
+
   const data = {
   labels: [
     "Duelist",

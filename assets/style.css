@@ -27,8 +27,6 @@ div.agent {
 	
 }
 
-
-
 .chart {
 	
 	height: auto;
@@ -37,7 +35,6 @@ div.agent {
 	color: aliceblue;
 	
 }
-
 
 div.radioWrapper {
 	display: inline-block;
@@ -75,12 +72,18 @@ div.radioWrapper {
 	font-size: 15px;
 	font-weight: 100;
 	font-style: italic;
-   
 }
 
-
-
-
-  
-  
-  
+.searchForm{
+	display: inline-block;
+	width: 250px;
+	height: 80px;
+	margin-top: 15px;
+	padding-left: 15px;
+	padding-right: 15px;
+	padding-top: 40px;
+	background-color: rgb(32, 21, 60);
+	color: white;
+	font-size: 17px;
+	font-family: Verdana, Geneva, Tahoma;
+}
